@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HAPP Серо-Белая Подписка</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: #0c0c0e; color: #fff; text-align: center; padding: 40px 20px; }
+        .card { background: #141418; max-width: 500px; margin: 0 auto; padding: 30px; border-radius: 20px; border: 1px solid #23232a; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        h1 { font-size: 22px; color: #74b9ff; margin-bottom: 10px; }
+        p { color: #858594; font-size: 14px; margin-bottom: 25px; }
+        .btn { display: inline-block; background: #fff; color: #000; padding: 14px 28px; border-radius: 12px; font-weight: 700; text-decoration: none; cursor: pointer; transition: background 0.2s; }
+        .btn:hover { background: #e2e8f0; }
+        .raw-box { margin-top: 25px; background: #1c1c22; padding: 15px; border-radius: 10px; font-family: monospace; font-size: 12px; text-align: left; word-break: break-all; max-height: 150px; overflow-y: auto; color: #a4b0be; display: none; }
+    </style>
+</head>
+<body>
+
+<script>
+    // Исходные данные твоих серверов
+    const rawServers = [
+        "vless://b0d8a4b4-31de-450a-89e4-816c7c3641f6@pl-s3.ru:443?encryption=none&flow=xtls-rprx-vision&type=tcp&headerType=none&security=reality&sni=pl-s3.ru&fp=edge&pbk=nFJCJ2tvxLdLrc9G-O1laW8KDir5SDnaOTmYndVaOGQ&sid=7a3f9e2b1c8d4f6a&spx=%2F#🇵🇱 Польша",
+        "vless://b0d8a4b4-31de-450a-89e4-816c7c3641f6@nl-s3.ru:443?encryption=none&flow=xtls-rprx-vision&type=tcp&headerType=none&security=reality&sni=nl-s3.ru&fp=edge&pbk=f0ZKjq1EcKFheb5Xy6KXNwZ55cGb1LsF-YjuJq8i3gY&sid=7a3f9e2b1c8d4f6a&spx=%2F#🇳🇱 Нидерланды",
+        "vless://b0d8a4b4-31de-450a-89e4-816c7c3641f6@bg-s3.ru:443?encryption=none&flow=xtls-rprx-vision&type=tcp&headerType=none&security=reality&sni=bg-s3.ru&fp=edge&pbk=YJcT7zmUKg1Tk38VCE8zZQ641w1kfRk8GaLssKHhvDg&sid=7a3f9e2b1c8d4f6a&spx=%2F#🇬🇧 Англия",
+        "vless://b0d8a4b4-31de-450a-89e4-816c7c3641f6@de-s3.ru:443?encryption=none&flow=xtls-rprx-vision&type=tcp&headerType=none&security=reality&sni=de-s3.ru&fp=edge&pbk=CmKaRa0TecpFSyn7OK6UTPPuWJ7ji2OwsaOBuUtSKGM&sid=7a3f9e2b1c8d4f6a&spx=%2F#🇩🇪 Германия",
+        "vless://b0d8a4b4-31de-450a-89e4-816c7c3641f6@ae.s3-rus.ru:8443?encryption=none&flow=xtls-rprx-vision&type=tcp&headerType=none&security=reality&sni=ads.x5.ru&fp=edge&pbk=x274vAATjQyRHChXL5coeXJB4ZuGx_-4Q_918Rw6lWA&sid=372c05b48fe83e5b&spx=%2F#🇦🇪 ОАЭ",
+        "vless://b0d8a4b4-31de-450a-89e4-816c7c3641f6@kr.s3-rus.ru:8443?encryption=none&flow=xtls-rprx-vision&type=tcp&headerType=none&security=reality&sni=ads.x5.ru&fp=edge&pbk=x274vAATjQyRHChXL5coeXJB4ZuGx_-4Q_918Rw6lWA&sid=372c05b48fe83e5b&spx=%2F#🇰🇷 Южная Корея"
+    ];
+
+    // Генерируем конфигурацию со встроенной темой через параметры имен
+    // #theme-color: #1c1c1e (серый), #powerIcon-color: #ffffff (белый)
+    let outputText = "#profile-title: Space Gray VPN\n#theme-color: #1c1c1e\n#powerIcon-color: #ffffff\n\n";
+    
+    rawServers.forEach(server => {
+        // Добавляем к названию каждого сервера скрытые теги темы через ?
+        outputText += server + "?theme=1c1c1e&icon=ffffff\n";
+    });
+
+    // ПЕРЕХВАТЧИК HAPP: Если запрос идет из приложения или через RAW, отдаем только чистый текст
+    if (window.location.search.includes('raw=1') || navigator.userAgent.includes('HAPP')) {
+        document.open();
+        document.write('<pre style="font-family:monospace; white-space:pre-wrap; background:#000; color:#fff; padding:20px; margin:0;">' + outputText + '</pre>');
+        document.close();
+    }
+</script>
+
+<div class="card">
+    <h1>Серо-Белая Тема Готова</h1>
+    <p>Твои рабочие сервера упакованы вместе с темой оформления для HAPP.</p>
+    <button class="btn" onclick="copyLink()">Скопировать ссылку для HAPP</button>
+    <div class="raw-box" id="codeView"></div>
+</div>
+
+<script>
+    // Генерируем ссылку на этот же сайт, но с флагом raw=1 для HAPP
+    const finalConfigUrl = window.location.href.split('?')[0] + "?raw=1";
+    document.getElementById('codeView').innerText = finalConfigUrl;
+    document.getElementById('codeView').style.display = "block";
+
+    function copyLink() {
+        navigator.clipboard.writeText(finalConfigUrl).then(() => {
+            alert('Ссылка скопирована! Заходи в HAPP -> Жми плюс (+) -> Из буфера обмена.');
+        });
+    }
+</script>
+</body>
+</html>
